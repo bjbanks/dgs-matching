@@ -13,7 +13,29 @@ to any other matching M' for graph G.
 
 ## DGS (Demange, Gale, and Sotomayor) Algorithm
 
-TODO - describe algorithm
+Initialization:
+
+  1. For each good j, set p_j = 0 and owner_j = null.
+  
+  2. Initialize a queue Q to contain all bidders i.
+  
+  3. Fix delta = 1/(n_g+1), where n_g is the number of goods.
+  
+While Q is not empty do:
+
+  1. i = Q.deque().
+  
+  2. Find j that maximizes w_{ij} - p_j.
+  
+  3. If w_{ij} - p_j >= 0 then
+  
+      3a. Enque current owner_j into Q.
+    
+      3b. owner_j = i.
+    
+      3c. p_j = p_j + delta.
+    
+Resultant matching: the set of (owner_j, j) for all j.
 
 ## EE 382V Social Computing - Assignment 1 - #5
 
