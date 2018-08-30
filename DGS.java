@@ -1,28 +1,22 @@
 // Bryson Banks
 
-// DGS Algorithm:
-// 	Initialization:
-// 		1. For each good j, set p_j = 0 and owner_j = null.
-// 		2. Initialize a queue Q to contain all bidders i.
-// 		3. Fix delta = 1/(n_g+1), where n_g is the number of goods.
-// 	While Q is not empty do:
-// 		1. i = Q.deque().
-// 		2. Find j that maximizes w_{ij} - p_j.
-// 		3. If w_{ij} - p_j >= 0 then
-// 			3a. Enque current owner_j into Q.
-// 			3b. owner_j = i.
-// 			3c. p_j = p_j + delta.
-// 	Output: the set of (owner_j, j) for all j.
-
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class DGS {
 	
-	static int size;	// size of the square matrix = num of cols = num of rows
-	static int[][] w;	// weight of edges (x,y)
-
+	static int size;		// size of the square matrix = num of cols = num of rows
+	static int[][] w;		// weight of edges (x,y)
+	
+	static float[] p_y;		// value of y items
+	static int[] owner_y;	// x owner of y items
+	
+	static LinkedList<Integer> Q;	// queue of bidders x
+	
+	static float delta;		// item value incrementing value
+	
 	// Takes in an input file containing a square matrix and size representing
 	// a weighted bipartite graph. Using the DGS algorithm, finds the
 	// maximum weighted matching for the given input graph, then outputs the
@@ -40,11 +34,92 @@ public class DGS {
 			return;
 		}
 		
-		//TODO - find maximum weighted matching
+		// initialize variables for DGS algorithm
+		initDGS();
 		
-		//TODO - print weight of matching followed by a sorted list of edges in the matching
+		// augment the matching using DGS algorithm
+		augmentMatching();
+		
+		// finally print results
+		printMatching();
 	}
-
+	
+	// initializes variables for DGS algorithm
+	public static void initDGS() {
+		p_y = new float[size];
+		owner_y = new int[size];
+		Q = new LinkedList<>();
+		for (int i = 0; i < size; i++) {
+			// set starting price of all items to 0
+			p_y[i] = 0.0f;
+			// no items are yet owned
+			owner_y[i] = -1;
+			// add all bidders to auction queue
+			Q.add(i);
+		}
+		// fix delta = 1/(nsize+1), where size is the number of items
+		delta = (1.0f / (size + 1.0f));
+	}
+	
+	// uses the DGS algorithm to find the maximum weighted matching
+	public static void augmentMatching() {
+		while (!Q.isEmpty()) {
+			// take next bidder
+			int i = Q.removeFirst();
+			// determine item that maximizes profit for bidder
+			int j = 0;
+			float maxVal = Float.MIN_VALUE;
+			for (int y = 0; y < size; y++) {
+				float val = w[i][y] - p_y[y];
+				if (val > maxVal) {
+					j = y;
+					maxVal = val;
+				}
+			}
+			if (maxVal >= 0) {
+				// if item has previous owner, add them to auction queue
+				if (owner_y[j] != -1) {
+					Q.add(owner_y[j]);
+				}
+				// assign bidder i as owner of item j
+				owner_y[j] = i;
+				// increase price of item
+				p_y[j] = p_y[j] + delta;
+			}
+		}
+	}
+	
+	// returns the weight of the current matching
+	public static int getMatchingWeight() {
+		int weight = 0;
+		for (int y = 0; y < size; y++) {
+			if (owner_y[y] != -1) {
+				weight += w[owner_y[y]][y];
+			}
+		}
+		return weight;
+	}
+	
+	// prints weight of matching followed by a sorted list
+	// of edges in the matching
+	public static void printMatching() {
+		System.out.println(getMatchingWeight());
+		int[] edges = new int[size];
+		for (int x = 0; x < size; x++) {
+			edges[x] = -1;
+		}
+		for (int y = 0; y < size; y++) {
+			if (owner_y[y] != -1) {
+				edges[owner_y[y]] = y;
+			}
+		}
+		for (int x = 0; x < size; x++) {
+			if (edges[x] != -1) {
+				System.out.println("(" + (x+1) + "," + (edges[x]+1) + ")");
+			}
+		}
+	}
+	
 	// parse given input file
 	// returns true if success, or false if parsing fails
 	public static boolean parseInput(String inputFile) {
