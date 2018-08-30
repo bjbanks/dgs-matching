@@ -1,7 +1,21 @@
 # dgs-matching
 weighted bipartite matching using the DGS (Demange, Gale, Sotomayor) algorithm
 
-## EE 382V Social Computing - Assignment 1 - Problem 5
+## Weighted Bipartite Matching
+
+Weighted bipartite graphs are bipartite graphs in which each edge (x,y) has a weight,
+or value, w(x,y).
+
+The weight of a matching M is the sum of the weights of edges in M.
+
+The maximum weighted matching M for a graph G has a matching weight greater than or equal
+to any other matching M' for graph G.
+
+## DGS (Demange, Gale, and Sotomayor) Algorithm
+
+TODO - describe algorithm
+
+## EE 382V Social Computing - Assignment 1 - #5
 
 ```
 5. (35 points) This question requires you to implement DGS Algorithm for the weighted bipartite matching.
