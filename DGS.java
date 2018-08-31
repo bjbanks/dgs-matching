@@ -7,15 +7,15 @@ import java.util.Scanner;
 
 public class DGS {
 	
-	static int size;		// size of the square matrix = num of cols = num of rows
-	static int[][] w;		// weight of edges (x,y)
+	private static int size;		// size of the square matrix = num of cols = num of rows
+	private static int[][] w;		// weight of edges (x,y)
 	
-	static float[] p_y;		// value of y items
-	static int[] owner_y;	// x owner of y items
+	private static float[] p_y;		// value of y items
+	private static int[] owner_y;	// x owner of y items
 	
-	static LinkedList<Integer> Q;	// queue of bidders x
+	private static LinkedList<Integer> Q;	// queue of bidders x
 	
-	static float delta;		// item value incrementing value
+	private static float delta;		// item value incrementing value
 	
 	// Takes in an input file containing a square matrix and size representing
 	// a weighted bipartite graph. Using the DGS algorithm, finds the
@@ -45,7 +45,7 @@ public class DGS {
 	}
 	
 	// initializes variables for DGS algorithm
-	public static void initDGS() {
+	private static void initDGS() {
 		p_y = new float[size];
 		owner_y = new int[size];
 		Q = new LinkedList<>();
@@ -62,7 +62,7 @@ public class DGS {
 	}
 	
 	// uses the DGS algorithm to find the maximum weighted matching
-	public static void augmentMatching() {
+	private static void augmentMatching() {
 		while (!Q.isEmpty()) {
 			// take next bidder
 			int i = Q.removeFirst();
@@ -90,7 +90,7 @@ public class DGS {
 	}
 	
 	// returns the weight of the current matching
-	public static int getMatchingWeight() {
+	private static int getMatchingWeight() {
 		int weight = 0;
 		for (int y = 0; y < size; y++) {
 			if (owner_y[y] != -1) {
@@ -102,7 +102,7 @@ public class DGS {
 	
 	// prints weight of matching followed by a sorted list
 	// of edges in the matching
-	public static void printMatching() {
+	private static void printMatching() {
 		System.out.println(getMatchingWeight());
 		int[] edges = new int[size];
 		for (int x = 0; x < size; x++) {
@@ -122,7 +122,7 @@ public class DGS {
 	
 	// parse given input file
 	// returns true if success, or false if parsing fails
-	public static boolean parseInput(String inputFile) {
+	private static boolean parseInput(String inputFile) {
 		// create file scanner object
 		Scanner scanner;
 		try {
@@ -155,7 +155,7 @@ public class DGS {
 
 	// parse input file to retrieve matrix size
 	// returns size, or -1 if parsing fails
-	public static int parseSize(Scanner scanner) {
+	private static int parseSize(Scanner scanner) {
 		if (scanner.hasNextInt()) {
 			return scanner.nextInt();
 		} else {
@@ -165,7 +165,7 @@ public class DGS {
 
 	// parse input file to retrieve square matrix
 	// returns matrix, or null if parsing fails
-	public static int[][] parseMatrix(Scanner scanner, int size) {
+	private static int[][] parseMatrix(Scanner scanner, int size) {
 		int[][] matrix = new int[size][size];
 		for (int rowIndex = 0; rowIndex < size; rowIndex++) {
 			for (int colIndex = 0; colIndex < size; colIndex++) {
