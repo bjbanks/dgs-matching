@@ -33,6 +33,8 @@ public class DGS {
 		if (!parseInput(inputFile)) {
 			return;
 		}
+
+		long startTime=System.nanoTime();
 		
 		// initialize variables for DGS algorithm
 		initDGS();
@@ -42,6 +44,10 @@ public class DGS {
 		
 		// finally print results
 		printMatching();
+		
+		long endTime=System.nanoTime();
+		long totalTime=endTime-startTime;
+		System.out.println("Total time taken for DGS is "+totalTime);
 	}
 	
 	// initializes variables for DGS algorithm
